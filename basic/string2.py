@@ -26,9 +26,9 @@ def verbing(s):
     else:
         last_3 = s[-3:]
         if last_3 == 'ing':
-          result = s + 'ly'
+            result = s + 'ly'
         else:
-          result = s + 'ing'
+            result = s + 'ing'
     return result
 
 
@@ -42,7 +42,14 @@ def verbing(s):
 # This dinner is good!
 def not_bad(s):
     # +++your code here+++
-    return
+    result = ''
+    not_i = s.find('not')
+    bad_i = s.find('bad')
+    if not_i != -1 and bad_i != -1 and not_i < bad_i:
+        result = s.split('not')[0] + 'good' + s.split('bad')[1]
+    else:
+        result = s
+    return result
 
 
 # F. front_back
