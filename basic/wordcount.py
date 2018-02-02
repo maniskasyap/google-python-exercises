@@ -48,8 +48,24 @@ import sys
 
 def print_words(f):
     words_dict = read_file(f)
+    # print(words_dict.items())
+    # print(sorted(words_dict.items()))
     print_from_dict(sorted(words_dict.items()))
     return
+
+
+def print_top(f):
+    words_dict = read_file(f)
+    # print(sorted(words_dict.items(), key=sort_val, reverse=True))
+    # print(sorted(words_dict.items(), key=lambda t: t[1], reverse=True))
+    # print_from_dict(sorted(words_dict.items(), key=sort_val, reverse=True)[:20])
+    print_from_dict(sorted(words_dict.items(),
+                           key=lambda t: t[1], reverse=True)[:20])
+    return
+
+
+# def sort_val(t):
+#     return t[-1]
 
 
 def read_file(name):
