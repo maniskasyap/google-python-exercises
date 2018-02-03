@@ -43,13 +43,24 @@ def extract_names(filename):
     """
     # +++your code here+++
     f = open(filename, 'rU')
-    t = re.findall(r'Popularity in (\d+)', f.read())
+    # t = re.findall(r'Popularity in (\d+)', f.read())
     # t = re.findall(r'Popularity in (\d+).<td>(\d+)</td><td>(\w+)</td><td>(\w+)', f.read(), re.DOTALL)
-    # t = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)', f.read(), re.DOTALL)
+    t = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)', f.read(), re.DOTALL)
     # t = re.findall(r'<td>(.+?)</td>', f.read())
     f.close()
-    print t
+    l_d = get_names(t)
+    print l_d
     return
+
+def get_names(t):
+  l_dict = []
+  for each in t:
+    d = {}
+    d['rank'] = each[0]
+    d['name_male'] = each[1]
+    d['name_female'] = each[2]
+    l_dict.append(d)
+  return l_dict
 
 
 def main():
