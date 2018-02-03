@@ -8,6 +8,7 @@
 
 import sys
 import re
+from operator import itemgetter
 
 """Baby Names exercise
 
@@ -43,30 +44,45 @@ def extract_names(filename):
     """
     # +++your code here+++
     f = open(filename, 'rU')
-    # t = re.findall(r'Popularity in (\d+)', f.read())
-    # t = re.findall(r'Popularity in (\d+).<td>(\d+)</td><td>(\w+)</td><td>(\w+)', f.read(), re.DOTALL)
-    t = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)', f.read(), re.DOTALL)
-    # t = re.findall(r'<td>(.+?)</td>', f.read())
+    file_text = f.read()
     f.close()
-    l_d = get_names(t)
-    print l_d
-    return
+    t_year = re.findall(r'Popularity in (\d+)', file_text)
+    # t = re.findall(r'Popularity in (\d+).<td>(\d+)</td><td>(\w+)</td><td>(\w+)', f.read(), re.DOTALL)
+    t_names = re.findall(r'<td>(\d+)</td><td>(\w+)</td><td>(\w+)', file_text)
+    l_d = get_names(t_names)
+    result = []
+    result.extend(t_year)
+    for name in l_d:
+        result.append(name['name'] + ' ' + name['rank'])
+    return '\n'.join(result)
+
 
 def get_names(t):
-  l_dict = []
-  for each in t:
-    d = {}
-    d['rank'] = each[0]
-    d['name_male'] = each[1]
-    d['name_female'] = each[2]
-    l_dict.append(d)
-  return l_dict
+    l_dict = []
+    for each in t:
+        d_male = {}
+        d_female = {}
+        d_male['rank'] = each[0]
+        d_male['name'] = each[1]
+        d_female['rank'] = each[0]
+        d_female['name'] = each[2]
+        l_dict.append(d_male)
+        l_dict.append(d_female)
+    # print l_dict
+    # print sorted(l_dict, key=itemgetter('name'))
+    return sorted(l_dict, key=itemgetter('name'))
+
+def write_to_summary(file_name, text):
+  f = open(file_name + '.summary', 'w')
+  f.write(text)
+  f.close()
+  return
 
 
 def main():
-    # This command-line parsing code is provided.
-    # Make a list of command line arguments, omitting the [0] element
-    # which is the script itself.
+        # This command-line parsing code is provided.
+        # Make a list of command line arguments, omitting the [0] element
+        # which is the script itself.
     args = sys.argv[1:]
 
     if not args:
@@ -82,8 +98,11 @@ def main():
     # +++your code here+++
     # For each filename, get the names, then either print the text output
     # or write it to a summary file
-    extract_names(args[0])
-
+    out = extract_names(args[0])
+    if summary:
+      write_to_summary(args[0], out)
+    else:
+      print out
 
 if __name__ == '__main__':
     main()
